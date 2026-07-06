@@ -7,12 +7,29 @@
 | Scene 1 | 초기 POV 영상 기획 기록이며 최종 영상에서 미사용, 별도 생성 파일도 현재 저장소에서 확인되지 않음 |
 | Scene 2 | 3~6초, 바다·도시·산의 3분할 POV 합성, `03_제작_자료/Videos/scene02_motion.mp4` |
 | Scene 3 | 0~3초 오프닝, 해안 절벽의 EchoLens 착용 셀피, `03_제작_자료/Videos/scene03_motion.mp4` |
+| Scene 3 Pika 재제작 | 비교 실험용 Text to Video, `03_제작_자료/Videos/scene03_pika_remake.mp4` |
 | Scene 4 | 6~8초, EchoLens AI 편집 UI, `03_제작_자료/Videos/scene04_motion.mp4` |
 | Scene 5 | 8~10초, Kling AI 추가 생성 없이 CapCut에서 정지 이미지와 Fade 효과로 처리 |
 
 Kling AI 크레딧 제약으로 Scene 수와 최종 순서를 조정했다. 아래 Scene 2~4의 영어 Prompt는 프로젝트에 기록된 Kling AI 영상 Prompt이며, Scene 1·5 Prompt는 초기 기획 기록으로 유지한다. Kling 플랫폼의 실제 입력 이력 파일은 저장소에 없어 문서 Prompt와 입력 이력의 완전한 동일성은 별도로 검증할 수 없다.
 
 Scene 2~4 실제 영상 우측 하단에는 `KlingAI 3.0` 워터마크가 표시된다.
+
+## Pika Scene 3 비교 재제작
+
+| 항목 | 내용 |
+|---|---|
+| 목적 | 동일 스토리보드 다른 도구 재제작 비교 실험 및 보너스 과제 수행 |
+| 생성 방식 | Text to Video |
+| 실제 파일 | `03_제작_자료/Videos/scene03_pika_remake.mp4` |
+| 실제 규격 | 5초, 784×470, 30fps |
+| 유지 요소 | 해안 절벽, 셀피 구도, AI 스마트글래스 콘셉트 |
+| 결과 차이 | Kling 원본의 남성 인물이 여성 인물로 바뀌고 안경이 넓은 바이저형 디자인으로 변화 |
+| 장점 | 자연스러운 셀피 움직임 |
+| 한계 | 인물 및 제품 디자인 일관성 부족 |
+| 최종 광고 반영 | 미반영 — 비교 실험 전용 |
+
+Pika의 실제 입력 Prompt 문자열은 현재 저장소에서 확인되지 않으므로 임의로 작성하지 않는다.
 
 ## 1. 공통 제작 기준
 
