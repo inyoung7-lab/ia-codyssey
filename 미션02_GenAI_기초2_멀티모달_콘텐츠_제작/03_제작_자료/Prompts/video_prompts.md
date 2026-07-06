@@ -1,5 +1,19 @@
 # EchoLens Video Prompt Guide
 
+## 실제 제작 반영
+
+| 구분 | 실제 반영 내용 |
+|---|---|
+| Scene 1 | 초기 POV 영상 기획 기록이며 최종 영상에서 미사용, 별도 생성 파일도 현재 저장소에서 확인되지 않음 |
+| Scene 2 | 3~6초, 바다·도시·산의 3분할 POV 합성, `03_제작_자료/Videos/scene02_motion.mp4` |
+| Scene 3 | 0~3초 오프닝, 해안 절벽의 EchoLens 착용 셀피, `03_제작_자료/Videos/scene03_motion.mp4` |
+| Scene 4 | 6~8초, EchoLens AI 편집 UI, `03_제작_자료/Videos/scene04_motion.mp4` |
+| Scene 5 | 8~10초, Kling AI 추가 생성 없이 CapCut에서 정지 이미지와 Fade 효과로 처리 |
+
+Kling AI 크레딧 제약으로 Scene 수와 최종 순서를 조정했다. 아래 Scene 2~4의 영어 Prompt는 프로젝트에 기록된 Kling AI 영상 Prompt이며, Scene 1·5 Prompt는 초기 기획 기록으로 유지한다. Kling 플랫폼의 실제 입력 이력 파일은 저장소에 없어 문서 Prompt와 입력 이력의 완전한 동일성은 별도로 검증할 수 없다.
+
+Scene 2~4 실제 영상 우측 하단에는 `KlingAI 3.0` 워터마크가 표시된다.
+
 ## 1. 공통 제작 기준
 
 - 사용 도구: Kling AI
@@ -9,6 +23,14 @@
 - 일관성 기준: 동일한 캐릭터, 제품 디자인, 색감과 프리미엄 광고 톤 유지
 
 ## 2. Scene 1 — 여행의 시작
+
+**Scene 번호**
+
+Scene 1
+
+**영상 생성 목적**
+
+여행의 시작과 자유로운 설렘을 1인칭 POV로 전달한다.
 
 **카메라 움직임**
 
@@ -32,6 +54,14 @@ Animate this image as an immersive first-person POV walking smoothly toward and 
 
 ## 3. Scene 2 — 세계 여행의 하이라이트
 
+**Scene 번호**
+
+Scene 2
+
+**영상 생성 목적**
+
+바다, 도시, 산을 빠르게 보여주며 다양한 여행 경험을 역동적으로 전달한다.
+
 **카메라 움직임**
 
 바다에서는 전진 이동, 도시에서는 빠른 트래킹, 산에서는 전망을 향한 부드러운 상승 움직임을 적용한다.
@@ -52,7 +82,19 @@ Animate a fast-paced cinematic world travel highlight, moving forward along ocea
 
 - `scene02_motion.mp4`
 
+**실제 파일명**
+
+- `scene02_motion.mp4`
+
 ## 4. Scene 3 — EchoLens 제품 소개
+
+**Scene 번호**
+
+Scene 3
+
+**영상 생성 목적**
+
+EchoLens AI Smart Glasses의 핵심 기능과 프리미엄 이미지를 자연스럽게 소개한다.
 
 **카메라 움직임**
 
@@ -74,7 +116,20 @@ Animate a subtle cinematic push-in toward a Korean male travel creator in his 20
 
 - `scene03_motion.mp4`
 
+**실제 파일명 및 편집 반영**
+
+- `scene03_motion.mp4`
+- 최종 광고 오프닝으로 사용
+
 ## 5. Scene 4 — AI 자동 편집
+
+**Scene 번호**
+
+Scene 4
+
+**영상 생성 목적**
+
+AI가 여행 장면을 자동으로 정리하고 하이라이트 영상으로 완성하는 경험을 전달한다.
 
 **카메라 움직임**
 
@@ -96,7 +151,23 @@ Animate a minimal AI editing interface as ocean, city, and mountain travel clips
 
 - `scene04_motion.mp4`
 
+**실제 파일명**
+
+- `scene04_motion.mp4`
+
 ## 6. Scene 5 — 브랜드 엔딩
+
+**Scene 번호**
+
+Scene 5
+
+**영상 생성 목적**
+
+EchoLens 브랜드명, 슬로건, CTA를 제시해 브랜드를 각인시킨다.
+
+**실제 처리 방식**
+
+Kling AI 영상은 추가 생성하지 않고 CapCut에서 정지 이미지와 Fade 효과로 처리했다. 아래 영어 Prompt는 초기 영상화 계획으로 유지한다.
 
 **카메라 움직임**
 

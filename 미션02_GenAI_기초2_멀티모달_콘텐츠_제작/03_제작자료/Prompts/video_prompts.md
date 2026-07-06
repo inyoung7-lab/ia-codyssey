@@ -1,5 +1,16 @@
 # EchoLens Kling AI Video Prompt Guide
 
+## 실제 제작 반영
+
+| 구분 | 실제 반영 내용 |
+|---|---|
+| Scene 2 | Kling AI 영상 `03_제작_자료/Videos/scene02_motion.mp4` |
+| Scene 3 | Kling AI 영상 `03_제작_자료/Videos/scene03_motion.mp4`, 최종 광고 오프닝으로 재구성 |
+| Scene 4 | Kling AI 영상 `03_제작_자료/Videos/scene04_motion.mp4` |
+| Scene 5 | 추가 영상 생성 없이 CapCut에서 정지 이미지와 Fade 효과로 처리 |
+
+Kling AI 크레딧 제약으로 Scene 수와 최종 순서를 조정했으며, Scene 2~4를 중심으로 Kling AI 영상을 제작했다.
+
 ## 공통 제작 조건
 
 - 전체 광고 길이: 10초 이내
@@ -49,6 +60,8 @@
 - **예정 파일명:** `scene04_motion.mp4`
 
 ## Scene 5 — 브랜드 엔딩
+
+> 실제 제작에서는 Kling AI 영상을 추가 생성하지 않고 CapCut에서 정지 이미지와 Fade 효과로 처리했다. 아래 내용은 초기 영상화 계획이다.
 
 - **Scene 번호:** Scene 5
 - **영상 길이:** 2초
