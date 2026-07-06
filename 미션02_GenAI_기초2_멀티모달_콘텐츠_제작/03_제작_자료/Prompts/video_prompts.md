@@ -31,6 +31,19 @@ Scene 2~4 실제 영상 우측 하단에는 `KlingAI 3.0` 워터마크가 표시
 
 Pika의 실제 입력 Prompt 문자열은 현재 저장소에서 확인되지 않으므로 임의로 작성하지 않는다.
 
+## Hedra Lip-sync Prompt
+
+| 항목 | 실제 입력 내용 |
+|---|---|
+| 도구 | Hedra |
+| 방식 | Talking Avatar / Lip-sync |
+| 이미지 입력 | 기존 Scene 3 대표 이미지 |
+| 음성 Prompt | `Travel Free. Record Smart.` |
+| 결과 파일 | `01_스토리보드_기획/Bonus/scene03_hedra_lipsync.mp4` |
+| 최종 광고 반영 | 미반영 — 보너스 과제 전용 |
+
+현재 저장소에서 확인되는 실제 Hedra 입력 문구는 `Travel Free. Record Smart.`이다. 확인되지 않은 추가 모션 Prompt는 작성하지 않는다.
+
 ## 1. 공통 제작 기준
 
 - 사용 도구: Kling AI

@@ -217,6 +217,23 @@ Pika 재제작 결과는 `01_스토리보드_기획/Bonus/` 폴더에서 바로 
 
 Pika 영상은 최종 광고에 사용한 영상이 아니라 동일 스토리보드를 다른 도구로 재제작한 비교 실험 결과이다. 실제 파일은 5초, 784×470, 30fps이며, 해안 절벽·셀피 구도·AI 스마트글래스 콘셉트는 유지했지만 인물 성별과 안경 디자인은 Kling 원본과 달라졌다. 원본 Pika 파일은 `03_제작_자료/Videos/scene03_pika_remake.mp4`에도 유지한다.
 
+### 보너스 과제: Hedra Lip-sync
+
+| 항목 | 내용 |
+|---|---|
+| 도구 | Hedra |
+| 목적 | Scene 3을 Talking Avatar 방식으로 재구현 |
+| 입력 | 기존 Scene 3 대표 이미지 |
+| 음성 | `Travel Free. Record Smart.` |
+| 결과 | Lip-sync 데모 영상 생성 |
+| 실제 규격 | 3.23초, 1280×720, H.264, AAC 오디오 |
+| 사용 목적 | 보너스 과제 수행 |
+| 최종 광고 교체 여부 | 교체하지 않음 |
+
+- 영상 링크: [Hedra Scene 3 Lip-sync 결과](Bonus/scene03_hedra_lipsync.mp4)
+
+Hedra 영상은 최종 광고에 포함하지 않은 Talking Avatar 비교 실험 결과이다.
+
 ---
 
 ## 4. Scene 1
