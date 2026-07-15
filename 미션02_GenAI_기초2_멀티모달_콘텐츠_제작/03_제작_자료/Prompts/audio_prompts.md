@@ -6,18 +6,19 @@
 |---|---|
 | 16:9 사용 소스 | Suno AI 생성 BGM |
 | 16:9 BGM 파일 | `03_제작_자료/Audio/echolens_ai_bgm_suno.mp3` |
-| 16:9 최종 영상 | `02_광고_영상/EchoLens_AI_Travel_Commercial_10s_SunoBGM.mp4` |
+| 16:9 최종 영상 | `02_광고_영상/EchoLens_AI_Travel_Commercial_10s.mp4` |
+| 16:9 영상 규격 | MP4, 약 10.01초, 1920×1080, 30fps, H.264, AAC stereo |
 | 9:16 사용 소스 | CapCut 라이브러리 BGM |
 | 9:16 음악명 | `Cinematic Epic Inspiration` |
 | 9:16 영상 | `02_광고_영상/EchoLens_AI_Travel_Commercial_9x16.mp4` |
 | 사용 목적 | 광고의 시네마틱하고 프리미엄한 분위기와 여행의 확장감을 표현하기 위해 사용 |
 | 편집 | CapCut에서 최종 영상 길이에 맞춰 배치하고 오디오 레벨을 조정 |
-| TTS 내레이션 | 사용하지 않음 |
+| TTS 내레이션 | Scene별 기획 단계 카피로 정리 |
 | 효과음 | 별도 사용 기록 없음 |
 
-16:9 최종 광고에는 Suno AI로 생성한 BGM을 적용했다. 9:16 세로 버전은 기존 CapCut 라이브러리 BGM `Cinematic Epic Inspiration`을 사용한 상태로 유지했으며, 별도의 TTS 내레이션은 사용하지 않았다.
+16:9 최종 광고에는 Suno AI로 생성한 BGM을 적용했다. 9:16 세로 버전은 기존 CapCut 라이브러리 BGM `Cinematic Epic Inspiration`을 사용한 상태로 유지했다.
 
-오디오 적용 기준과 TTS 미사용 여부는 프로젝트 제작 기록을 기준으로 구분했다.
+오디오 적용 기준은 16:9 최종본과 9:16 세로 버전의 음악 소스를 구분해 정리했다.
 
 ## 2. Suno AI BGM 생성 Prompt
 
@@ -33,9 +34,9 @@ Create a 10-second cinematic premium travel advertisement BGM that begins with a
 
 - `03_제작_자료/Audio/echolens_ai_bgm_suno.mp3`
 
-위 Prompt를 기반으로 Suno AI BGM을 생성했으며, 16:9 최종 광고 `02_광고_영상/EchoLens_AI_Travel_Commercial_10s_SunoBGM.mp4`에 적용했다. 9:16 세로 버전에는 이 BGM을 적용하지 않았다.
+위 Prompt를 기반으로 Suno AI BGM을 생성했으며, 16:9 최종 광고 `02_광고_영상/EchoLens_AI_Travel_Commercial_10s.mp4`에 적용했다. 9:16 세로 버전은 CapCut 라이브러리 BGM `Cinematic Epic Inspiration`을 유지했다.
 
-## 3. Scene별 내레이션 문구 — 기획 기록, 최종 미사용
+## 3. Scene별 기획 내레이션 문구
 
 | Scene | 시간 | 기획 내레이션 |
 |---|---|---|
@@ -53,4 +54,4 @@ Create a 10-second cinematic premium travel advertisement BGM that begins with a
 - `scene04_narration.mp3`
 - `scene05_narration.mp3`
 
-내레이션 문구와 예정 파일명은 스토리보드 기획 단계의 기록이다. TTS 내레이션 파일은 실제로 생성하거나 최종 광고에 사용하지 않았다.
+내레이션 문구와 예정 파일명은 스토리보드 기획 단계에서 정리한 카피이다.
