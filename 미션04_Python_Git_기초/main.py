@@ -85,20 +85,44 @@ def add_prompt():
     print("프롬프트가 추가되었습니다.")
 
 
+def show_list():
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    for index, prompt in enumerate(prompts, start=1):
+        favorite_mark = "O" if prompt["favorite"] else "X"
+        print(
+            f"{index}. {prompt['title']} | "
+            f"카테고리: {prompt['category']} | 즐겨찾기: {favorite_mark}"
+        )
+
+
+def get_menu_choice():
+    return input("메뉴 번호를 입력하세요: ").strip()
+
+
+def run_menu_choice(choice):
+    if choice == "0":
+        print("프로그램을 종료합니다.")
+        return False
+    if choice == "1":
+        add_prompt()
+    elif choice == "2":
+        show_list()
+    elif choice in ["3", "4", "5", "6", "7"]:
+        print("아직 구현되지 않은 기능입니다.")
+    else:
+        print("올바른 메뉴 번호를 입력해주세요.")
+    return True
+
+
 def main():
     while True:
         show_menu()
-        choice = input("메뉴 번호를 입력하세요: ")
-
-        if choice == "0":
-            print("프로그램을 종료합니다.")
+        choice = get_menu_choice()
+        if not run_menu_choice(choice):
             break
-        elif choice == "1":
-            add_prompt()
-        elif choice in ["2", "3", "4", "5", "6", "7"]:
-            print("아직 구현되지 않은 기능입니다.")
-        else:
-            print("올바른 메뉴 번호를 입력해주세요.")
 
 
 if __name__ == "__main__":
