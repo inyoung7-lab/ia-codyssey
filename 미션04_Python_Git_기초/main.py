@@ -11,6 +11,7 @@ prompts = [
         ),
         "category": "텍스트 생성",
         "favorite": False,
+        "views": 0,
     },
     {
         "title": "EchoLens 광고 이미지 제작",
@@ -20,6 +21,7 @@ prompts = [
         ),
         "category": "이미지 생성",
         "favorite": False,
+        "views": 0,
     },
     {
         "title": "AI 뉴스 자동화",
@@ -29,6 +31,7 @@ prompts = [
         ),
         "category": "자동화",
         "favorite": False,
+        "views": 0,
     },
 ]
 
@@ -45,6 +48,9 @@ def show_menu():
     print("8. JSON 저장")
     print("9. JSON 불러오기")
     print("10. Markdown 내보내기")
+    print("11. 프롬프트 수정")
+    print("12. 프롬프트 삭제")
+    print("13. 조회수 TOP 목록")
     print("0. 종료")
 
 
@@ -95,6 +101,7 @@ def add_prompt():
             "content": content,
             "category": category,
             "favorite": False,
+            "views": 0,
         }
     )
     print("프롬프트가 추가되었습니다.")
@@ -199,12 +206,14 @@ def show_prompt_detail():
                 break
         print("올바른 프롬프트 번호를 입력해주세요.")
 
+    selected_prompt["views"] = selected_prompt.get("views", 0) + 1
     favorite_mark = "O" if selected_prompt["favorite"] else "X"
     print("\n=== 프롬프트 상세 정보 ===")
     print(f"제목: {selected_prompt['title']}")
     print(f"내용: {selected_prompt['content']}")
     print(f"카테고리: {selected_prompt['category']}")
     print(f"즐겨찾기: {favorite_mark}")
+    print(f"조회수: {selected_prompt['views']}")
 
 
 def manage_favorite():
@@ -267,6 +276,9 @@ def load_prompts():
         print("prompts.json 파일의 JSON 형식이 올바르지 않습니다.")
         return
 
+    for prompt in loaded_prompts:
+        prompt.setdefault("views", 0)
+
     prompts.clear()
     prompts.extend(loaded_prompts)
     print("프롬프트를 JSON 파일에서 불러왔습니다.")
@@ -306,6 +318,86 @@ def export_markdown():
     print("Markdown 파일 내보내기가 완료되었습니다.")
 
 
+def edit_prompt():
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    print("\n=== 프롬프트 목록 ===")
+    for index, prompt in enumerate(prompts, start=1):
+        print(f"{index}. {prompt['title']}")
+
+    while True:
+        prompt_choice = input("수정할 프롬프트 번호를 입력하세요: ").strip()
+        if prompt_choice.isdigit():
+            prompt_index = int(prompt_choice) - 1
+            if 0 <= prompt_index < len(prompts):
+                selected_prompt = prompts[prompt_index]
+                break
+        print("올바른 프롬프트 번호를 입력해주세요.")
+
+    title = input(f"제목 [{selected_prompt['title']}]: ").strip()
+    content = input(f"내용 [{selected_prompt['content']}]: ").strip()
+    category = input(f"카테고리 [{selected_prompt['category']}]: ").strip()
+
+    if title:
+        selected_prompt["title"] = title
+    if content:
+        selected_prompt["content"] = content
+    if category:
+        selected_prompt["category"] = category
+
+    print("프롬프트가 수정되었습니다.")
+
+
+def delete_prompt():
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    print("\n=== 프롬프트 목록 ===")
+    for index, prompt in enumerate(prompts, start=1):
+        print(f"{index}. {prompt['title']}")
+
+    while True:
+        prompt_choice = input("삭제할 프롬프트 번호를 입력하세요: ").strip()
+        if prompt_choice.isdigit():
+            prompt_index = int(prompt_choice) - 1
+            if 0 <= prompt_index < len(prompts):
+                break
+        print("올바른 프롬프트 번호를 입력해주세요.")
+
+    while True:
+        confirmation = input("정말 삭제하시겠습니까? (y/n): ").strip().lower()
+        if confirmation == "y":
+            prompts.pop(prompt_index)
+            print("프롬프트가 삭제되었습니다.")
+            return
+        if confirmation == "n":
+            print("프롬프트 삭제가 취소되었습니다.")
+            return
+        print("y 또는 n을 입력해주세요.")
+
+
+def show_top_prompts():
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    ranked_prompts = sorted(
+        enumerate(prompts, start=1),
+        key=lambda item: item[1].get("views", 0),
+        reverse=True,
+    )
+
+    print("\n=== 조회수 TOP 목록 ===")
+    for rank, (index, prompt) in enumerate(ranked_prompts, start=1):
+        print(
+            f"{rank}위 | 번호: {index} | 제목: {prompt['title']} | "
+            f"조회수: {prompt.get('views', 0)}"
+        )
+
+
 def get_menu_choice():
     return input("메뉴 번호를 입력하세요: ").strip()
 
@@ -334,6 +426,12 @@ def run_menu_choice(choice):
         load_prompts()
     elif choice == "10":
         export_markdown()
+    elif choice == "11":
+        edit_prompt()
+    elif choice == "12":
+        delete_prompt()
+    elif choice == "13":
+        show_top_prompts()
     else:
         print("올바른 메뉴 번호를 입력해주세요.")
     return True
