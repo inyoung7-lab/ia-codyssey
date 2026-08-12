@@ -166,6 +166,32 @@ def search_prompt():
         )
 
 
+def show_prompt_detail():
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    print("\n=== 프롬프트 목록 ===")
+    for index, prompt in enumerate(prompts, start=1):
+        print(f"{index}. {prompt['title']}")
+
+    while True:
+        prompt_choice = input("상세히 볼 프롬프트 번호를 입력하세요: ").strip()
+        if prompt_choice.isdigit():
+            prompt_index = int(prompt_choice) - 1
+            if 0 <= prompt_index < len(prompts):
+                selected_prompt = prompts[prompt_index]
+                break
+        print("올바른 프롬프트 번호를 입력해주세요.")
+
+    favorite_mark = "O" if selected_prompt["favorite"] else "X"
+    print("\n=== 프롬프트 상세 정보 ===")
+    print(f"제목: {selected_prompt['title']}")
+    print(f"내용: {selected_prompt['content']}")
+    print(f"카테고리: {selected_prompt['category']}")
+    print(f"즐겨찾기: {favorite_mark}")
+
+
 def get_menu_choice():
     return input("메뉴 번호를 입력하세요: ").strip()
 
@@ -182,7 +208,9 @@ def run_menu_choice(choice):
         category_list()
     elif choice == "4":
         search_prompt()
-    elif choice in ["5", "6", "7"]:
+    elif choice == "5":
+        show_prompt_detail()
+    elif choice in ["6", "7"]:
         print("아직 구현되지 않은 기능입니다.")
     else:
         print("올바른 메뉴 번호를 입력해주세요.")
