@@ -139,6 +139,33 @@ def category_list():
         )
 
 
+def search_prompt():
+    while True:
+        keyword = input("검색어를 입력하세요: ").strip()
+        if keyword:
+            break
+        print("검색어를 입력해주세요.")
+
+    normalized_keyword = keyword.casefold()
+    search_results = [
+        (index, prompt)
+        for index, prompt in enumerate(prompts, start=1)
+        if normalized_keyword in prompt["title"].casefold()
+        or normalized_keyword in prompt["content"].casefold()
+    ]
+
+    if not search_results:
+        print("검색 결과가 없습니다.")
+        return
+
+    for index, prompt in search_results:
+        favorite_mark = "O" if prompt["favorite"] else "X"
+        print(
+            f"{index}. {prompt['title']} | "
+            f"카테고리: {prompt['category']} | 즐겨찾기: {favorite_mark}"
+        )
+
+
 def get_menu_choice():
     return input("메뉴 번호를 입력하세요: ").strip()
 
@@ -153,7 +180,9 @@ def run_menu_choice(choice):
         show_list()
     elif choice == "3":
         category_list()
-    elif choice in ["4", "5", "6", "7"]:
+    elif choice == "4":
+        search_prompt()
+    elif choice in ["5", "6", "7"]:
         print("아직 구현되지 않은 기능입니다.")
     else:
         print("올바른 메뉴 번호를 입력해주세요.")
