@@ -67,10 +67,18 @@ def add_prompt():
         print("\n카테고리를 선택하세요.")
         for index, category in enumerate(categories, start=1):
             print(f"{index}. {category}")
+        print("7. 직접 입력")
 
         category_choice = input("카테고리 번호를 입력하세요: ").strip()
         if category_choice in ["1", "2", "3", "4", "5", "6"]:
             category = categories[int(category_choice) - 1]
+            break
+        if category_choice == "7":
+            while True:
+                category = input("카테고리명을 입력하세요: ").strip()
+                if category:
+                    break
+                print("카테고리명을 입력해주세요.")
             break
         print("올바른 카테고리 번호를 입력해주세요.")
 
