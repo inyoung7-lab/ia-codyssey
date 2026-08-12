@@ -192,6 +192,49 @@ def show_prompt_detail():
     print(f"즐겨찾기: {favorite_mark}")
 
 
+def manage_favorite():
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    print("\n=== 프롬프트 목록 ===")
+    for index, prompt in enumerate(prompts, start=1):
+        print(f"{index}. {prompt['title']}")
+
+    while True:
+        prompt_choice = input("즐겨찾기를 변경할 프롬프트 번호를 입력하세요: ").strip()
+        if prompt_choice.isdigit():
+            prompt_index = int(prompt_choice) - 1
+            if 0 <= prompt_index < len(prompts):
+                selected_prompt = prompts[prompt_index]
+                break
+        print("올바른 프롬프트 번호를 입력해주세요.")
+
+    selected_prompt["favorite"] = not selected_prompt["favorite"]
+    if selected_prompt["favorite"]:
+        print("즐겨찾기에 추가되었습니다.")
+    else:
+        print("즐겨찾기에서 제거되었습니다.")
+
+
+def show_favorites():
+    favorite_prompts = [
+        (index, prompt)
+        for index, prompt in enumerate(prompts, start=1)
+        if prompt["favorite"]
+    ]
+
+    if not favorite_prompts:
+        print("즐겨찾기된 프롬프트가 없습니다.")
+        return
+
+    for index, prompt in favorite_prompts:
+        print(
+            f"{index}. {prompt['title']} | "
+            f"카테고리: {prompt['category']} | 즐겨찾기: O"
+        )
+
+
 def get_menu_choice():
     return input("메뉴 번호를 입력하세요: ").strip()
 
@@ -210,8 +253,10 @@ def run_menu_choice(choice):
         search_prompt()
     elif choice == "5":
         show_prompt_detail()
-    elif choice in ["6", "7"]:
-        print("아직 구현되지 않은 기능입니다.")
+    elif choice == "6":
+        manage_favorite()
+    elif choice == "7":
+        show_favorites()
     else:
         print("올바른 메뉴 번호를 입력해주세요.")
     return True
