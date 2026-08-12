@@ -1,3 +1,7 @@
+import json
+import os
+
+
 prompts = [
     {
         "title": "LLM 프롬프트 엔지니어링 글 작성",
@@ -38,6 +42,9 @@ def show_menu():
     print("5. 프롬프트 상세 보기")
     print("6. 즐겨찾기 관리")
     print("7. 즐겨찾기 목록")
+    print("8. JSON 저장")
+    print("9. JSON 불러오기")
+    print("10. Markdown 내보내기")
     print("0. 종료")
 
 
@@ -243,6 +250,62 @@ def show_favorites():
         )
 
 
+def save_prompts():
+    with open("prompts.json", "w", encoding="utf-8") as file:
+        json.dump(prompts, file, ensure_ascii=False, indent=4)
+    print("프롬프트를 JSON 파일에 저장했습니다.")
+
+
+def load_prompts():
+    try:
+        with open("prompts.json", "r", encoding="utf-8") as file:
+            loaded_prompts = json.load(file)
+    except FileNotFoundError:
+        print("prompts.json 파일이 없습니다.")
+        return
+    except json.JSONDecodeError:
+        print("prompts.json 파일의 JSON 형식이 올바르지 않습니다.")
+        return
+
+    prompts.clear()
+    prompts.extend(loaded_prompts)
+    print("프롬프트를 JSON 파일에서 불러왔습니다.")
+
+
+def export_markdown():
+    if not prompts:
+        print("내보낼 프롬프트가 없습니다.")
+        return
+
+    prompts_by_category = {}
+    for prompt in prompts:
+        category = prompt["category"]
+        if category not in prompts_by_category:
+            prompts_by_category[category] = []
+        prompts_by_category[category].append(prompt)
+
+    exports_path = os.path.join(os.path.dirname(__file__), "exports")
+    os.makedirs(exports_path, exist_ok=True)
+
+    invalid_characters = '<>:"/\\|?*'
+    for category, category_prompts in prompts_by_category.items():
+        filename = "_".join(category.split())
+        for character in invalid_characters:
+            filename = filename.replace(character, "_")
+        markdown_path = os.path.join(exports_path, f"{filename}.md")
+
+        with open(markdown_path, "w", encoding="utf-8") as file:
+            file.write(f"# {category}\n\n")
+            for prompt in category_prompts:
+                favorite_mark = "O" if prompt["favorite"] else "X"
+                file.write(f"## {prompt['title']}\n\n")
+                file.write(f"- 내용: {prompt['content']}\n")
+                file.write(f"- 카테고리: {prompt['category']}\n")
+                file.write(f"- 즐겨찾기: {favorite_mark}\n\n")
+
+    print("Markdown 파일 내보내기가 완료되었습니다.")
+
+
 def get_menu_choice():
     return input("메뉴 번호를 입력하세요: ").strip()
 
@@ -265,6 +328,12 @@ def run_menu_choice(choice):
         manage_favorite()
     elif choice == "7":
         show_favorites()
+    elif choice == "8":
+        save_prompts()
+    elif choice == "9":
+        load_prompts()
+    elif choice == "10":
+        export_markdown()
     else:
         print("올바른 메뉴 번호를 입력해주세요.")
     return True
