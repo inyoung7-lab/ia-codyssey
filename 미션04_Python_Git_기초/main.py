@@ -98,6 +98,47 @@ def show_list():
         )
 
 
+def category_list():
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    categories = []
+    for prompt in prompts:
+        if prompt["category"] not in categories:
+            categories.append(prompt["category"])
+
+    while True:
+        print("\n=== 카테고리 목록 ===")
+        for index, category in enumerate(categories, start=1):
+            print(f"{index}. {category}")
+
+        category_choice = input("카테고리 번호를 입력하세요: ").strip()
+        if category_choice.isdigit():
+            category_index = int(category_choice) - 1
+            if 0 <= category_index < len(categories):
+                selected_category = categories[category_index]
+                break
+        print("올바른 카테고리 번호를 입력해주세요.")
+
+    matching_prompts = [
+        (index, prompt)
+        for index, prompt in enumerate(prompts, start=1)
+        if prompt["category"] == selected_category
+    ]
+
+    if not matching_prompts:
+        print("해당 카테고리에 등록된 프롬프트가 없습니다.")
+        return
+
+    for index, prompt in matching_prompts:
+        favorite_mark = "O" if prompt["favorite"] else "X"
+        print(
+            f"{index}. {prompt['title']} | "
+            f"카테고리: {prompt['category']} | 즐겨찾기: {favorite_mark}"
+        )
+
+
 def get_menu_choice():
     return input("메뉴 번호를 입력하세요: ").strip()
 
@@ -110,7 +151,9 @@ def run_menu_choice(choice):
         add_prompt()
     elif choice == "2":
         show_list()
-    elif choice in ["3", "4", "5", "6", "7"]:
+    elif choice == "3":
+        category_list()
+    elif choice in ["4", "5", "6", "7"]:
         print("아직 구현되지 않은 기능입니다.")
     else:
         print("올바른 메뉴 번호를 입력해주세요.")
