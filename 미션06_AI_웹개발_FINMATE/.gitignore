@@ -1,0 +1,17 @@
+# 환경 변수 / API Key
+.env
+.env.local
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel/
