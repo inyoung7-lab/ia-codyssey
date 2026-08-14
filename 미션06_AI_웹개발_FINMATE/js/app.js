@@ -14,6 +14,11 @@ const analyzeButton = document.getElementById("analyzeButton");
 const statusMessage = document.getElementById("statusMessage");
 const analysisResult = document.getElementById("analysisResult");
 const themeToggle = document.getElementById("themeToggle");
+const analysisHistory = document.getElementById("analysisHistory");
+const clearHistoryButton = document.getElementById("clearHistoryButton");
+
+const ANALYSIS_HISTORY_STORAGE_KEY = "finmateAnalysisHistory";
+const MAX_ANALYSIS_HISTORY = 5;
 
 
 // ==========================================================
@@ -214,7 +219,232 @@ function showErrorResult() {
 
 
 // ==========================================================
-// 10. AI 기업 분석
+// 10. 최근 분석 기록
+// ==========================================================
+
+function formatAnalysisDateTime(date = new Date()) {
+
+    const pad = (value) => String(value).padStart(2, "0");
+
+    return (
+        `${date.getFullYear()}-` +
+        `${pad(date.getMonth() + 1)}-` +
+        `${pad(date.getDate())} ` +
+        `${pad(date.getHours())}:` +
+        `${pad(date.getMinutes())}`
+    );
+
+}
+
+
+function formatHistoryDateTime(value) {
+
+    const match = String(value).match(
+        /^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2})$/
+    );
+
+    if (!match) {
+        return String(value);
+    }
+
+    return `${match[1]}.${match[2]}.${match[3]} ${match[4]}`;
+
+}
+
+
+function readAnalysisHistory() {
+
+    try {
+
+        const storedHistory = localStorage.getItem(
+            ANALYSIS_HISTORY_STORAGE_KEY
+        );
+
+        if (!storedHistory) {
+            return [];
+        }
+
+        const parsedHistory = JSON.parse(storedHistory);
+
+        if (!Array.isArray(parsedHistory)) {
+            return [];
+        }
+
+        return parsedHistory
+            .filter((record) => (
+                record &&
+                typeof record.company === "string" &&
+                record.company.trim() &&
+                typeof record.analyzedAt === "string" &&
+                record.analyzedAt.trim()
+            ))
+            .map((record) => ({
+                company: record.company.trim(),
+                analyzedAt: record.analyzedAt.trim()
+            }))
+            .slice(0, MAX_ANALYSIS_HISTORY);
+
+    } catch (error) {
+
+        console.error(
+            "최근 분석 기록을 불러오지 못했습니다:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+function renderAnalysisHistory(history = readAnalysisHistory()) {
+
+    if (!analysisHistory) {
+        return;
+    }
+
+    analysisHistory.innerHTML = "";
+
+    if (clearHistoryButton) {
+        clearHistoryButton.disabled = history.length === 0;
+    }
+
+    if (history.length === 0) {
+
+        const emptyMessage = document.createElement("p");
+
+        emptyMessage.className = "history-empty";
+        emptyMessage.textContent = "아직 분석한 기업이 없습니다.";
+
+        analysisHistory.appendChild(emptyMessage);
+
+        return;
+
+    }
+
+    const historyList = document.createElement("ul");
+
+    historyList.className = "history-list";
+
+    history.forEach((record) => {
+
+        const historyItem = document.createElement("li");
+        const companyName = document.createElement("span");
+        const analyzedAt = document.createElement("time");
+
+        historyItem.className = "history-item";
+        companyName.className = "history-company";
+        analyzedAt.className = "history-date";
+
+        companyName.textContent = record.company;
+        analyzedAt.textContent = formatHistoryDateTime(
+            record.analyzedAt
+        );
+        analyzedAt.dateTime = record.analyzedAt.replace(
+            " ",
+            "T"
+        );
+
+        historyItem.appendChild(companyName);
+        historyItem.appendChild(analyzedAt);
+        historyList.appendChild(historyItem);
+
+    });
+
+    analysisHistory.appendChild(historyList);
+
+}
+
+
+function saveAnalysisHistory(company) {
+
+    const companyName = String(company).trim();
+
+    if (!companyName) {
+        return false;
+    }
+
+    const normalizedCompany = companyName.toLocaleLowerCase();
+    const previousHistory = readAnalysisHistory();
+
+    const updatedHistory = [
+        {
+            company: companyName,
+            analyzedAt: formatAnalysisDateTime()
+        },
+        ...previousHistory.filter((record) => (
+            record.company.toLocaleLowerCase() !==
+            normalizedCompany
+        ))
+    ].slice(0, MAX_ANALYSIS_HISTORY);
+
+    try {
+
+        localStorage.setItem(
+            ANALYSIS_HISTORY_STORAGE_KEY,
+            JSON.stringify(updatedHistory)
+        );
+
+        renderAnalysisHistory(updatedHistory);
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "최근 분석 기록을 저장하지 못했습니다:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+function clearAnalysisHistory() {
+
+    try {
+
+        localStorage.removeItem(
+            ANALYSIS_HISTORY_STORAGE_KEY
+        );
+
+        renderAnalysisHistory([]);
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "최근 분석 기록을 삭제하지 못했습니다:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+if (clearHistoryButton) {
+
+    clearHistoryButton.addEventListener(
+        "click",
+        clearAnalysisHistory
+    );
+
+}
+
+
+renderAnalysisHistory();
+
+
+// ==========================================================
+// 11. AI 기업 분석
 // ==========================================================
 
 if (
@@ -420,6 +650,10 @@ if (
                 );
 
 
+                // 성공한 분석만 최근 기록에 저장한다.
+                saveAnalysisHistory(company);
+
+
                 showStatus(
                     `${company} 분석이 완료되었습니다.`,
                     "success"
@@ -550,7 +784,7 @@ if (
 
 
 // ==========================================================
-// 11. 페이지 최초 실행 시 hash 위치 이동
+// 12. 페이지 최초 실행 시 hash 위치 이동
 // ==========================================================
 
 window.addEventListener("load", () => {
