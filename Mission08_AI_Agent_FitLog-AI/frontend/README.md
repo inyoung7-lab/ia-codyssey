@@ -6,7 +6,7 @@
 
 날짜는 오름차순입니다. 마우스 이동·터치 이동 또는 캔버스에서 좌우 방향키로 날짜와 시간을 확인할 수 있습니다. 범위 변경은 추가 API 요청 없이 반영됩니다. 새 기록 저장·새로고침 시 그래프도 갱신되며 선택 범위는 유지됩니다.
 
-HTML / CSS / Vanilla JavaScript 기반 로컬 대시보드입니다. 패키지 설치나 빌드가 필요하지 않습니다.
+HTML / CSS / Vanilla JavaScript 기반 로컬 대시보드입니다. 패키지 설치는 필요하지 않습니다. 로컬 정적 실행은 기존 config.js를 사용하며, Vercel에서는 환경변수로 config.js를 생성하는 빌드를 실행합니다.
 
 프로젝트 루트에서 터미널 두 개로 실행합니다.
 
@@ -53,3 +53,13 @@ node --test tests/frontend.test.cjs
 테마는 theme.js와 styles.css가 담당하며 fitlog-theme에 저장합니다. 저장된 선택이 없으면 시스템 테마를 참고합니다. chart.js는 테마 이벤트를 받아 다시 그립니다. JSON 다운로드는 구현하지 않았습니다.
 
 추가 테스트: `node --test tests/frontend.test.cjs tests/bonus.test.cjs`
+
+## Vercel 설정 생성
+
+Root Directory: `Mission08_AI_Agent_FitLog-AI/frontend`
+Build Command: `node build-config.js`
+Output Directory: `.`
+
+Production의 공개 `API_BASE_URL` 환경변수를 빌드 시 읽어 config.js를 생성합니다. 미설정이나 잘못된 URL은 실패하며 끝 슬래시를 제거합니다. API 키나 Firebase 인증정보는 넣지 않습니다. Preview에도 빌드하려면 해당 범위의 환경변수를 설정하세요. 환경변수 변경 후 새 빌드가 필요합니다.
+
+로컬에서 URL을 변경할 때는 PowerShell에서 `$env:API_BASE_URL`을 원하는 API origin으로 설정하고 프로젝트 루트에서 `node frontend/build-config.js`를 실행합니다. 기존 정적 서버 실행 방법은 같습니다.

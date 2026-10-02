@@ -229,7 +229,7 @@ STEP 12.5의 최소 요청은 `model`과 `messages`였습니다. STEP 15 채팅�
 
 주 화면은 data 기반 요약·7/30일/전체 그래프·GPT 채팅·이전 대화·CRUD 관리입니다. 기존 workouts 화면과 로컬 분석은 아래에 보존합니다. 새 기록 관리의 변경은 data와 GPT 요약에만 반영되며 workouts와 자동 동기화되지 않습니다. GPT는 전송 버튼을 눌러야 호출됩니다. 이전 대화 불러오기와 새 대화 초기화는 GPT를 호출하지 않습니다.
 
-`frontend/config.js`의 공개 `API_BASE_URL`만 바꾸면 백엔드 주소를 변경할 수 있습니다(배포 시 백엔드 CORS도 별도 설정 필요). 프론트엔드에 인증키를 넣지 않습니다. 상세 실행·검증은 [frontend README](frontend/README.md)를 참고하세요. `node --test tests/frontend.test.cjs`로 네트워크 없는 화면 로직 회귀 테스트를 실행합니다.
+`API_BASE_URL` 빌드 환경변수를 설정하고 `node frontend/build-config.js`를 실행하면 `frontend/config.js`가 생성됩니다(배포 시 백엔드 CORS도 별도 설정 필요). 프론트엔드에 인증키를 넣지 않습니다. 상세 실행·검증은 [frontend README](frontend/README.md)를 참고하세요. `node --test tests/frontend.test.cjs`로 네트워크 없는 화면 로직 회귀 테스트를 실행합니다.
 
 
 ## STEP 14 Bonus 2: Insight / UX Enhancement
@@ -339,9 +339,11 @@ Firebase 인증은 `FIREBASE_SERVICE_ACCOUNT_JSON`이 비어 있지 않으면 �
 
 ### Vercel 정적 프론트엔드
 
-Root Directory는 `frontend`, Framework Preset은 `Other`, Build Command는 비워두고 Output Directory는 `.`로 설정합니다. HTML/CSS/Vanilla JS를 그대로 제공하므로 npm 프로젝트나 추가 빌드 도구가 필요 없습니다. 프로젝트 전체를 정적 루트로 노출하지 않습니다.
+Vercel Root Directory는 `Mission08_AI_Agent_FitLog-AI/frontend`, Framework Preset은 `Other`, Build Command는 `node build-config.js`, Output Directory는 `.`로 설정합니다. HTML/CSS/Vanilla JS를 그대로 제공하므로 npm 프로젝트나 추가 빌드 도구가 필요 없습니다. 프로젝트 전체를 정적 루트로 노출하지 않습니다.
 
-실제 Render HTTPS 주소가 확정되면 `frontend/config.js`의 `API_BASE_URL` 한 값만 교체합니다. 현재는 로컬 개발 주소를 유지하며 가짜 배포 URL을 넣지 않았습니다. 정적 JS에 Vercel 환경변수가 자동 주입되지는 않습니다. Vercel origin을 Render의 `ALLOWED_ORIGINS`에 추가한 뒤 배포 단계에서 실제 CORS를 검증합니다.
+Vercel Production 환경변수 `API_BASE_URL`을 설정하면 빌드가 `process.env.API_BASE_URL`을 읽어 `config.js`를 생성합니다. 누락·빈 값·잘못된 URL은 빌드 실패로 처리하며 끝 슬래시를 제거합니다. 인증정보·경로·query·fragment가 포함된 URL은 거부합니다. 공개 API origin만 출력하고 다른 환경변수나 secret은 포함하지 않습니다. 환경변수 변경은 다음 빌드부터 반영됩니다. Preview 빌드에도 필요한 경우 해당 범위의 환경변수를 별도로 설정해야 합니다. Vercel origin은 Render의 `ALLOWED_ORIGINS`에도 등록합니다.
+
+로컬에서는 기존 `config.js`로 정적 서버를 그대로 실행할 수 있습니다. 로컬 백엔드를 사용하려면 `API_BASE_URL`을 로컬 origin으로 설정해 같은 스크립트를 실행한 뒤 정적 서버를 시작합니다. 배포 빌드는 항상 Vercel 환경변수로 다시 생성하므로 로컬 값에 의존하지 않습니다.
 
 MCP는 별도 로컬 stdio 프로세스이며 FastAPI 시작 시 실행되지 않습니다. requirements의 pywin32에는 Windows 전용 조건이 있어 Linux에서 제외됩니다. Ollama의 localhost 주소는 Render에서 사용자 PC를 가리키지 않으므로 기존 로컬 Ollama 기능은 클라우드에서 별도 연결 없이는 사용할 수 없습니다. 이번 단계에서는 이를 변경하거나 외부로 노출하지 않습니다.
 
