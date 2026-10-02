@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FitLog AI · 운동 대시보드</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js" defer></script>
+  <script src="theme.js" defer></script>
+  <script src="chart.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="ai.js" defer></script>
+  <script src="data.js" defer></script>
+  <script src="chat.js" defer></script>
+  <script src="export.js" defer></script>
+</head>
+<body>
+  <main>
+    <button id="theme-toggle" type="button" aria-pressed="false">다크 모드</button>
+    <header><p class="brand">FITLOG AI</p><h1>나의 운동 기록</h1><p>매일의 움직임을 한눈에 확인하세요.</p></header>
+    <section aria-labelledby="data-summary-title">
+      <div class="heading"><h2 id="data-summary-title">운동 한눈에 보기</h2><button id="data-refresh" type="button">데이터 새로고침</button></div>
+      <p class="hint">아래 요약·그래프·AI 운동 비서는 운동 기록 관리에 저장한 데이터를 사용합니다.</p>
+      <p id="data-summary-status" role="status" aria-atomic="true"></p>
+      <div id="data-summary" hidden>
+        <p id="data-period"></p>
+        <div class="metrics">
+          <article><h3>기록 수</h3><strong id="data-count"></strong></article>
+          <article><h3>총 운동시간</h3><strong id="data-total"></strong></article>
+          <article><h3>평균 운동시간</h3><strong id="data-average"></strong></article>
+          <article><h3>최소 / 최대</h3><strong id="data-extremes"></strong></article>
+        </div>
+        <h3>추가 인사이트</h3><p class="hint">전체 기록 기간 기준. 0분은 휴식일이며 누락일은 연속 운동을 끊습니다.</p>
+        <div class="metrics">
+          <article><h3>운동한 날</h3><strong id="insight-workout"></strong></article>
+          <article><h3>휴식일</h3><strong id="insight-rest"></strong></article>
+          <article><h3>운동일 평균</h3><strong id="insight-average"></strong></article>
+          <article><h3>최장 연속 운동</h3><strong id="insight-streak"></strong></article>
+        </div><p id="data-trend"></p><p class="hint">단위는 분이며, 평균에는 기록된 휴식일이 포함됩니다. 누락일은 휴식일로 간주하지 않습니다.</p>
+      </div>
+    </section>
+    <section aria-labelledby="chart-title">
+      <div class="heading chart-heading">
+        <h2 id="chart-title">운동시간 추이</h2>
+        <div><label for="chart-range">표시 범위</label><select id="chart-range"><option value="7">최근 7일</option><option value="30" selected>최근 30일</option><option value="all">전체</option></select></div>
+      </div>
+      <p id="chart-status" role="status" aria-atomic="true">그래프를 불러오는 중입니다.</p>
+      <div id="chart-content" hidden>
+        <p id="chart-period" class="hint"></p>
+        <div class="chart-wrap"><canvas id="workout-chart" tabindex="0" role="img" aria-label="날짜별 운동시간 선 그래프. 좌우 방향키로 기록을 확인할 수 있습니다.">날짜별 운동시간은 그래프에 초점을 맞추고 좌우 방향키로 확인할 수 있습니다.</canvas></div>
+        <p id="chart-detail" role="status" aria-atomic="true">그래프 위에 마우스를 올리거나 터치하면 날짜와 운동시간을 확인할 수 있습니다.</p>
+        <p class="hint">마지막 기록 날짜 기준입니다. 0분은 휴식일이며, 기록이 없는 날짜를 0분으로 채우지 않습니다. 키보드는 그래프 선택 후 좌우 방향키를 사용하세요.</p>
+      </div>
+    </section>
+    <section aria-labelledby="chat-title">
+      <div class="heading"><h2 id="chat-title">AI 운동 비서</h2><button id="chat-new" type="button">새 대화</button></div>
+      <p class="hint">운동 기록의 요약을 바탕으로 답변합니다. 질문 전송 시 API 사용 토큰이 차감될 수 있습니다.</p>
+      <p id="chat-empty" class="hint">최근 운동 추세나 평균 운동시간을 질문해보세요.</p>
+      <div id="chat-messages" role="log" aria-label="대화 메시지" aria-live="polite" aria-relevant="additions text" tabindex="0"></div>
+      <form id="chat-form">
+        <label for="chat-input">질문</label><textarea id="chat-input" rows="3" required maxlength="4000" placeholder="운동 기록에 대해 질문해보세요."></textarea>
+        <button id="chat-send" type="submit">전송</button>
+      </form>
+      <p id="chat-status" role="status" aria-atomic="true"></p><p id="chat-context" class="hint"></p>
+    </section>
+    <section aria-labelledby="history-title">
+      <div class="heading"><h2 id="history-title">이전 대화</h2><button id="history-refresh" type="button">대화 목록 새로고침</button></div>
+      <p id="history-status" role="status" aria-atomic="true"></p>
+      <ul id="history-list" class="history-list"></ul>
+    </section>
+    <section aria-labelledby="data-title">
+      <h2 id="data-title">운동 기록 관리</h2>
+      <button id="csv-download" type="button" disabled>CSV 다운로드</button>
+      <p class="hint">현재 불러온 전체 기록을 다운로드합니다. 최신 기록이 필요하면 먼저 데이터 새로고침을 눌러 주세요.</p>
+      <p id="export-status" role="status" aria-atomic="true"></p>
+      <p class="hint">이곳에서 저장한 기록은 위 요약·그래프·GPT 채팅에 반영됩니다. 아래 기존 운동 기록과는 별도로 관리됩니다.</p>
+      <h3 id="data-form-title">새 기록 추가</h3>
+      <form id="data-form"><fieldset id="data-fields">
+        <div class="entry-grid">
+          <div><label for="data-date">날짜</label><input id="data-date" type="date" required aria-describedby="data-date-hint"></div>
+          <div><label for="data-value">운동시간(분)</label><input id="data-value" type="number" required min="0" max="1440" step="1"></div>
+        </div>
+        <p id="data-date-hint" class="hint">수정할 때 날짜는 변경할 수 없습니다.</p>
+        <label for="data-memo">메모</label><textarea id="data-memo" rows="3" maxlength="500"></textarea>
+        <div class="actions"><button id="data-save" type="submit">기록 추가</button><button id="data-cancel" type="button" hidden>수정 취소</button></div>
+      </fieldset></form>
+      <p id="data-save-status" role="status" aria-atomic="true"></p>
+      <p id="data-list-status" role="status" aria-atomic="true"></p>
+      <div class="table-wrap"><table id="data-table" hidden><caption>최신 날짜부터 운동 기록</caption><thead><tr><th scope="col">날짜</th><th scope="col">분</th><th scope="col">메모</th><th scope="col">관리</th></tr></thead><tbody id="data-rows"></tbody></table></div>
+      <div class="actions"><button id="data-prev" type="button">이전 기록 페이지</button><span id="data-page" role="status"></span><button id="data-next" type="button">다음 기록 페이지</button></div>
+    </section>
+    <p class="legacy-note">기존 운동 기록 기능 · 아래 기능은 이전 운동 기록을 사용하며, 위 운동 기록 관리와 자동 동기화되지 않습니다.</p>
+    <section aria-labelledby="summary-title">
+      <div class="heading"><h2 id="summary-title">기존 운동 기록 요약</h2><button id="refresh" type="button">새로고침</button></div>
+      <p id="summary-status" role="status" aria-atomic="true">운동 요약을 불러오는 중입니다.</p>
+      <div id="summary" hidden>
+        <p id="period" class="period"></p>
+        <div class="metrics">
+          <article><h3>총 기록</h3><strong id="total"></strong></article>
+          <article><h3>평균 운동시간</h3><strong id="average"></strong></article>
+          <article><h3>최소 운동시간</h3><strong id="minimum"></strong></article>
+          <article><h3>최대 운동시간</h3><strong id="maximum"></strong></article>
+        </div>
+        <p class="hint">운동시간 단위는 분이며, 평균에는 휴식일이 포함됩니다.</p>
+      </div>
+    </section>
+    <section aria-labelledby="ai-title">
+      <h2 id="ai-title">추가 기능 · 로컬 AI 분석</h2>
+      <button id="analyze" type="button">AI 분석하기</button>
+      <p id="ai-status" role="status" aria-atomic="true"></p>
+      <div id="ai-result" hidden>
+        <p id="ai-statistics" class="hint"></p>
+        <div class="ai-feedback">
+          <article><h3>최근 운동 요약</h3><p id="ai-summary"></p></article>
+          <article><h3>기록에서 확인되는 패턴</h3><p id="ai-strength"></p></article>
+          <article><h3>추가로 확인하면 좋은 정보</h3><p id="ai-improvement"></p></article>
+          <article><h3>다음 기록 제안</h3><p id="ai-next"></p></article>
+        </div>
+        <p id="ai-provider" class="hint"></p>
+        <p class="hint">버튼을 누른 시점의 기록 정리입니다. 새 기록 저장 후에는 다시 분석하세요. 활동 분류는 단순 문자열 기반이며 운동 처방이나 건강 판단을 제공하지 않습니다.</p>
+      </div>
+    </section>
+    <section aria-labelledby="create-title">
+      <h2 id="create-title">기존 운동 기록 추가</h2>
+      <form id="create-form">
+        <fieldset id="create-fields">
+          <div class="entry-grid">
+            <div><label for="entry-date">날짜</label><input id="entry-date" type="date" required></div>
+            <div><label for="entry-value">운동시간(분)</label><input id="entry-value" type="number" min="0" max="1440" step="1" required></div>
+          </div>
+          <label for="entry-memo">메모</label>
+          <textarea id="entry-memo" maxlength="500" rows="3" placeholder="예: 웨이트 - 가슴"></textarea>
+          <p class="hint">0~1440분, 메모 최대 500자. 같은 날짜의 기록은 덮어쓰지 않습니다.</p>
+          <button id="save" type="submit">운동 기록 저장</button>
+        </fieldset>
+      </form>
+      <p id="save-status" role="status" aria-atomic="true"></p>
+    </section>
+    <section aria-labelledby="recent-title">
+      <h2 id="recent-title">최근 운동 기록</h2><p class="hint">최근 날짜부터 최대 7개 기록을 보여드립니다.</p>
+      <p id="recent-status" role="status" aria-atomic="true">운동 기록을 불러오는 중입니다.</p>
+      <div class="table-wrap" id="recent-table" hidden>
+        <table><thead><tr><th scope="col">날짜</th><th scope="col">운동시간</th><th scope="col">메모</th></tr></thead><tbody id="recent"></tbody></table>
+      </div>
+    </section>
+    <section aria-labelledby="date-title">
+      <h2 id="date-title">날짜별 기록 찾기</h2>
+      <form id="date-form"><label for="date">조회할 날짜</label><div class="date-controls"><input id="date" type="date" required><button id="search" type="submit">기록 조회</button></div></form>
+      <p id="date-status" role="status" aria-atomic="true">날짜를 선택해 운동 기록을 확인하세요.</p>
+      <dl id="date-result" hidden></dl>
+    </section>
+    <footer>FitLog AI · 나의 운동 기록 대시보드</footer>
+  </main>
+</body>
+</html>
